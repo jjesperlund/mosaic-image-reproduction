@@ -1,0 +1,23 @@
+function [ reproduced_image ] = mosaic_reproduce( image )
+
+    load('db.mat');
+
+    [rows cols channels] = size(image);
+    image = rgb2lab(image);
+    aa = length(db)
+    for d = 1:19
+        current = db{d};
+        meanL = mean2(current(:,:,1));
+    end
+    
+    for r = 1:rows
+        for c = 1:cols
+            
+        end
+    end
+    
+    image = lab2rgb(image);
+    reproduced_image = image;
+
+end
+
