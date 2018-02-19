@@ -27,7 +27,7 @@ end
 tic
 result = mosaic_reproduce(image_resized);
 result = imresize(result, [r, c]);
-result = imgaussfilt(result, 2);
+%result = imgaussfilt(result, 2);
 toc
 
 figure

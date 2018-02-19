@@ -1,11 +1,11 @@
 function [ reproduced_image ] = mosaic_reproduce( image )
 
-    load('db_19.mat')
+    load('db_22.mat')
 
     [rows cols channels] = size(image);
     image = rgb2lab(image);
     
-    reproduced_image = zeros(rows*30, cols*30, channels);
+    reproduced_image = zeros(rows * size(db{1,1}, 1), cols * size(db{1,1}, 1), channels);
     
     % L,a,b mean of each database image
     for d = 1:19
@@ -16,10 +16,10 @@ function [ reproduced_image ] = mosaic_reproduce( image )
         means(d,:) = [meanL, meanA, meanB];
     end
     
+    stepY = 0;
     for r = 1:rows
-        stepRows = 0;
-        stepCols = 0;
-    
+        
+        stepX = 0;
         for c = 1:cols
            imgL = image(r,c,1);
            imgA = image(r,c,2);
@@ -30,13 +30,12 @@ function [ reproduced_image ] = mosaic_reproduce( image )
            end
 
            [value, index] = min(distances);
-           reproduced_image(r:r+30-1, c*30:c+60-1, :) = db{1,index};
+           reproduced_image(r+stepY:r+stepY+30-1, c+stepX:c+stepX+30-1, :) = db{1,index};
+           stepX = stepX + 30;
         end
-        
+        stepY = stepY + 30;
     end
-    %{
-    %}
-    
+
     reproduced_image = lab2rgb(reproduced_image);
 
 end

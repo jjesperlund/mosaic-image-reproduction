@@ -1,6 +1,6 @@
 function [ reproduced_image ] = mosaic_reproduce( image )
 
-    load('db_19.mat')
+    load('db_24.mat')
 
     [rows cols channels] = size(image);
     image = rgb2lab(image);
@@ -8,7 +8,7 @@ function [ reproduced_image ] = mosaic_reproduce( image )
     reproduced_image = zeros(rows * size(db{1,1}, 1), cols * size(db{1,1}, 1), channels);
     
     % L,a,b mean of each database image
-    for d = 1:19
+    for d = 1:size(db, 2)
         current = db{1,d};
         meanL = mean2(current(:,:,1));
         meanA = mean2(current(:,:,2));
