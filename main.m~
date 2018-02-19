@@ -11,11 +11,11 @@ image = imread('images/strykjarnet.jpg');
 
 [r, c, ~] = size(image);
 if r > c
-  image_resized = imresize(image, (256/2) / r);
+  image_resized = imresize(image, (256) / r);
 elseif c > r
-  image_resized = imresize(image, (256/2) / c);
+  image_resized = imresize(image, (256) / c);
 else
-  image_resized = imresize(image, [(256/2), (256/2)]);
+  image_resized = imresize(image, [(256), (256/2)]);
 end
 
 
