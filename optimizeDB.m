@@ -1,3 +1,8 @@
-function [optimized_DB] = optimizeDB( db )
-
+function [ ] = optimizeDB( database_name )
 %%Function for optimizing image database
+
+    load(database_name)
+
+    
+
+end

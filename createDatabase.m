@@ -9,7 +9,7 @@ function [ ] = createDatabase( images_folder )
         disp(['Loading ', num2str(fname), '..'])
         img = imread(fname);
         
-        img = imresize(img, [30 30], 'nearest');
+        img = imresize(img, [60 60], 'nearest');
         db{i} = rgb2lab(img);
     end
     

@@ -1,6 +1,6 @@
 function [ reproduced_image ] = mosaic_reproduce( image )
 
-    load('db_24.mat')
+    load('db_200.mat')
 
     [rows cols channels] = size(image);
     image = rgb2lab(image);
