@@ -5,15 +5,15 @@
 createDatabase('../database');
 
 %% (Optional) Optimize the database
-
+clc;
 % Deletes one of the images if 2 images is closer in the CIELAB color space
 % than a set threshold
-optimizeDB('db_200.mat');
+optimizeDB('db_200.mat', 0.1);
 
 %% Read image to reproduce
 clc;
 % Read and resize input image
-image = imread('images/kangaroo.jpg');
+image = imread('images/strykjarnet.jpg');
 
 [r, c, ~] = size(image);
 
@@ -35,12 +35,12 @@ end
 if c == r
   image_resized = imresize(image, [1080, 1920]);
 else
-  image_resized = imresize(image, (1080) / r);
   image_resized = imresize(image, (1920) / c);
+  image_resized = imresize(image, (1080) / r);
 end
 
 tic
-result = mosaic_reproduce2(image_resized);
+result = mosaic_reproduce2(image_resized, 'db_optimized.mat');
 %result = imresize(result, [r, c]);
 %result = imgaussfilt(result, 2);
 toc

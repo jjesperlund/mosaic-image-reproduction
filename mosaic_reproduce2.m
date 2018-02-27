@@ -1,6 +1,6 @@
-function [ reproduced_image ] = mosaic_reproduce2( image )
+function [ reproduced_image ] = mosaic_reproduce2( image, database_name )
 
-    load('db_200.mat')
+    load(database_name)
 
     [rows cols channels] = size(image);
     image = rgb2lab(image);
@@ -8,34 +8,32 @@ function [ reproduced_image ] = mosaic_reproduce2( image )
     reproduced_image = zeros(rows, cols, channels);
     stepSize = size(db{1,1}, 1);
     
-    % L,a,b mean of each database image
-    for d = 1:size(db, 2)
-        current = db{1,d};
-        meanL = mean2(current(:,:,1));
-        meanA = mean2(current(:,:,2));
-        meanB = mean2(current(:,:,3));
-        means(d,:) = [meanL, meanA, meanB];
-    end
-    
     for r = 1:stepSize:rows
-        
         for c = 1:stepSize:cols
 
            sub_image = image(r:r+stepSize-1, c:c+stepSize-1, :);
-           meanL_image = mean2(sub_image(:,:,1));
-           meanA_image = mean2(sub_image(:,:,2));
-           meanB_image = mean2(sub_image(:,:,3));
-           % + (1 - ssim(sub_image(:,:,1), db{1,a}(:,:,1)))^2
            
            for a = 1:size(db, 2)
-               distances(1,a) = sqrt( (means(a,1) - meanL_image)^2 + (means(a,2) - meanA_image)^2 + (means(a,3) - meanB_image)^2 );
+               struct_dist(1,a) = 1 - ssim(sub_image, db{1,a});
+               distances(1,a) = mean2(sqrt( (db{1,a}(:,:,1) - sub_image(:,:,1))^2 + (db{1,a}(:,:,2) - sub_image(:,:,2))^2 + (db{1,a}(:,:,3) - sub_image(:,:,3))^2 ));
+           end
+           
+           % Normalize distance vectors
+           struct_dist = struct_dist/norm(struct_dist);
+           distances = distances/norm(distances);
+           
+           % Calculate total distance in both color and structural
+           % dimensioons
+           for a = 1:size(distances, 2)
+               total_dist(1,a) = sqrt( distances(a)^2 + struct_dist(a)^2 );
            end
 
-           [value, index] = min(distances);
+           [value, index] = min(total_dist);
+           %[value, index] = min(distances);
            reproduced_image(r:r+stepSize-1, c:c+stepSize-1, :) = db{1,index};
      
-        end
-       
+        end 
+        disp([num2str(uint8((r/rows) * 100)), '% completed.']);
     end
 
     reproduced_image = lab2rgb(reproduced_image);
