@@ -15,7 +15,7 @@ function [ reproduced_image ] = mosaic_reproduce2( image, database_name )
            
            for a = 1:size(db, 2)
                struct_dist(1,a) = 1 - ssim(sub_image, db{1,a});
-               distances(1,a) = mean2(sqrt( (db{1,a}(:,:,1) - sub_image(:,:,1))^2 + (db{1,a}(:,:,2) - sub_image(:,:,2))^2 + (db{1,a}(:,:,3) - sub_image(:,:,3))^2 ));
+               distances(1,a) = mean2(sqrt( (db{1,a}(:,:,1) - sub_image(:,:,1)).^2 + (db{1,a}(:,:,2) - sub_image(:,:,2)).^2 + (db{1,a}(:,:,3) - sub_image(:,:,3)).^2 ));
            end
            
            % Normalize distance vectors
@@ -23,7 +23,7 @@ function [ reproduced_image ] = mosaic_reproduce2( image, database_name )
            distances = distances/norm(distances);
            
            % Calculate total distance in both color and structural
-           % dimensioons
+           % dimensions
            for a = 1:size(distances, 2)
                total_dist(1,a) = sqrt( distances(a)^2 + struct_dist(a)^2 );
            end
